@@ -13866,15 +13866,35 @@ function Wy() {
             " FCFA"
           ] })
         ] }),
-        /* @__PURE__ */ l(
-          "button",
-          {
-            type: "button",
-            onClick: () => e("/driver/wallet"),
-            className: "w-full bg-green-50 text-green-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-100 transition-colors",
-            children: "Retrait et recharge"
-          }
-        )
+        /* @__PURE__ */ l("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-3", children: [
+          /* @__PURE__ */ f("div", { className: "rounded-xl border border-emerald-200 bg-emerald-50 p-3", children: [
+            /* @__PURE__ */ l("p", { className: "text-xs font-semibold uppercase tracking-wide text-emerald-700 mb-1", children: "Retrait" }),
+            /* @__PURE__ */ l("p", { className: "text-xs text-emerald-800 mb-3", children: "Transferez votre solde disponible vers votre numero mobile money." }),
+            /* @__PURE__ */ l(
+              "button",
+              {
+                type: "button",
+                onClick: () => e("/driver/wallet?mode=withdraw"),
+                className: "w-full text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors",
+                style: { background: "linear-gradient(135deg, #16a34a 0%, #15803d 100%)", boxShadow: "0 6px 14px rgba(22, 163, 74, 0.25)" },
+                children: "Demander un retrait"
+              }
+            )
+          ] }),
+          /* @__PURE__ */ f("div", { className: "rounded-xl border border-blue-200 bg-blue-50 p-3", children: [
+            /* @__PURE__ */ l("p", { className: "text-xs font-semibold uppercase tracking-wide text-blue-700 mb-1", children: "Recharge" }),
+            /* @__PURE__ */ l("p", { className: "text-xs text-blue-800 mb-3", children: "Ajoutez du solde pour vos operations et votre abonnement conducteur." }),
+            /* @__PURE__ */ l(
+              "button",
+              {
+                type: "button",
+                onClick: () => e("/driver/wallet?mode=recharge"),
+                className: "w-full bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors",
+                children: "Recharger mon solde"
+              }
+            )
+          ] })
+        ] })
       ] }),
       isPassenger && /* @__PURE__ */ f("div", { className: "bg-white rounded-2xl p-4 shadow-sm border border-gray-100", children: [
         /* @__PURE__ */ l("h3", { className: "font-bold text-gray-800 mb-2", children: "Portefeuille passager" }),
@@ -14327,7 +14347,7 @@ function ZyDriverWallet() {
   _e(() => {
     R();
   }, [e]);
-  const B = Number(h?.minimum_withdrawal_fcfa ?? 500), U = Number(h?.minimum_deposit_fcfa ?? 500), q = Number(h?.available_balance_fcfa ?? 0), H = Number(h?.pending_balance_fcfa ?? 0), j = Number(h?.total_balance_fcfa ?? q + H), G = Math.floor(Number(F.amount)), V = Number.isFinite(G) && G > q, K = h?.withdrawal_network_supported === !0 && !!h?.withdrawal_network, Y = h?.withdrawal_network_label ?? null, J = Math.floor(Number(M.amount)), X = Number.isFinite(J) && J < U, Z = h?.recharge_network_supported === !0 && !!h?.recharge_network, ee2 = h?.recharge_network_label ?? null, te = r || q < B || V || !K, ne = a || !Z || !Number.isFinite(J) || J < U || !M.password.trim();
+  const B = Number(h?.minimum_withdrawal_fcfa ?? 500), U = Number(h?.minimum_deposit_fcfa ?? 500), q = Number(h?.available_balance_fcfa ?? 0), H = Number(h?.pending_balance_fcfa ?? 0), j = Number(h?.total_balance_fcfa ?? q + H), G = Math.floor(Number(F.amount)), V = Number.isFinite(G) && G > q, K = h?.withdrawal_network_supported === !0 && !!h?.withdrawal_network, Y = h?.withdrawal_network_label ?? null, J = Math.floor(Number(M.amount)), X = Number.isFinite(J) && J < U, Z = h?.recharge_network_supported === !0 && !!h?.recharge_network, ee2 = h?.recharge_network_label ?? null, te = r || q < B || V || !K, ne = a || !Z || !Number.isFinite(J) || J < U || !M.password.trim(), modeParam = typeof window < "u" ? new URLSearchParams(window.location.search).get("mode") : null, showWithdrawSection = modeParam !== "recharge", showRechargeSection = modeParam !== "withdraw", showWithdrawHistory = modeParam !== "recharge", showRechargeHistory = modeParam !== "withdraw";
   return /* @__PURE__ */ f("div", { className: "min-h-screen bg-gray-50 pb-20", children: [
     /* @__PURE__ */ f("div", { className: "bg-gradient-to-r from-green-600 to-emerald-600 text-white p-6", children: [
       /* @__PURE__ */ f("div", { className: "flex items-center gap-4 mb-3", children: [
@@ -14363,8 +14383,8 @@ function ZyDriverWallet() {
             " FCFA"
           ] })
         ] }, re2.label)) }),
-        /* @__PURE__ */ l("div", { className: "grid grid-cols-1 xl:grid-cols-2 gap-4", children: [
-          /* @__PURE__ */ f("div", { className: "bg-white rounded-xl p-4 shadow-sm", children: [
+        /* @__PURE__ */ l("div", { className: showWithdrawSection && showRechargeSection ? "grid grid-cols-1 xl:grid-cols-2 gap-4" : "grid grid-cols-1 gap-4", children: [
+          showWithdrawSection && /* @__PURE__ */ f("div", { className: "bg-white rounded-xl p-4 shadow-sm", children: [
             /* @__PURE__ */ l("h3", { className: "font-bold text-gray-800 mb-2", children: "Demander un retrait" }),
             /* @__PURE__ */ f("p", { className: "text-sm text-gray-600 mb-3", children: [
               "Numero de retrait: ",
@@ -14378,6 +14398,13 @@ function ZyDriverWallet() {
               "Montant minimum: ",
               L.format(B),
               " FCFA"
+            ] }),
+            q < B && /* @__PURE__ */ f("p", { className: "text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mb-3", children: [
+              "Retrait indisponible: minimum ",
+              L.format(B),
+              " FCFA requis. Solde disponible: ",
+              L.format(q),
+              " FCFA."
             ] }),
             !K && /* @__PURE__ */ l("p", { className: "text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2 mb-3", children: "Le numero de profil ne correspond pas a un reseau mobile money pris en charge au Benin." }),
             H > 0 && /* @__PURE__ */ f("p", { className: "text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mb-3", children: [
@@ -14400,10 +14427,10 @@ function ZyDriverWallet() {
                 /* @__PURE__ */ l("label", { className: "block text-sm font-semibold text-gray-700 mb-1", children: "Mot de passe" }),
                 /* @__PURE__ */ l("input", { type: "password", value: F.password, onChange: (re2) => D({ ...F, password: re2.target.value }), className: "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500", required: !0 })
               ] }),
-              /* @__PURE__ */ l("button", { type: "submit", disabled: te, className: "w-full bg-green-600 text-white py-2.5 rounded-lg text-sm font-semibold hover:bg-green-700 transition-colors disabled:opacity-60", children: r ? "Transfert..." : "Valider le retrait" })
+              /* @__PURE__ */ l("button", { type: "submit", disabled: te, className: "w-full bg-emerald-600 text-white py-2.5 rounded-lg text-sm font-semibold hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-colors disabled:opacity-60", children: r ? "Transfert..." : "Demander un retrait" })
             ] })
           ] }),
-          /* @__PURE__ */ f("div", { className: "bg-white rounded-xl p-4 shadow-sm", children: [
+          showRechargeSection && /* @__PURE__ */ f("div", { className: "bg-white rounded-xl p-4 shadow-sm", children: [
             /* @__PURE__ */ l("h3", { className: "font-bold text-gray-800 mb-2", children: "Recharger mon solde" }),
             /* @__PURE__ */ f("p", { className: "text-sm text-gray-600 mb-3", children: [
               "Numero de recharge: ",
@@ -14434,8 +14461,8 @@ function ZyDriverWallet() {
             ] })
           ] })
         ] }),
-        /* @__PURE__ */ l("div", { className: "grid grid-cols-1 xl:grid-cols-2 gap-4", children: [
-          /* @__PURE__ */ f("div", { className: "bg-white rounded-xl p-4 shadow-sm", children: [
+        /* @__PURE__ */ l("div", { className: showWithdrawHistory && showRechargeHistory ? "grid grid-cols-1 xl:grid-cols-2 gap-4" : "grid grid-cols-1 gap-4", children: [
+          showWithdrawHistory && /* @__PURE__ */ f("div", { className: "bg-white rounded-xl p-4 shadow-sm", children: [
             /* @__PURE__ */ l("h3", { className: "font-bold text-gray-800 mb-3", children: "Historique des retraits" }),
             b.length === 0 ? /* @__PURE__ */ l("p", { className: "text-sm text-gray-500", children: "Aucun retrait pour le moment." }) : /* @__PURE__ */ l("div", { className: "space-y-2", children: b.map((re2) => /* @__PURE__ */ f("div", { className: "border border-gray-200 rounded-lg p-3", children: [
               /* @__PURE__ */ f("div", { className: "flex items-center justify-between mb-1", children: [
@@ -14456,7 +14483,7 @@ function ZyDriverWallet() {
               ] })
             ] }, re2.id)) })
           ] }),
-          /* @__PURE__ */ f("div", { className: "bg-white rounded-xl p-4 shadow-sm", children: [
+          showRechargeHistory && /* @__PURE__ */ f("div", { className: "bg-white rounded-xl p-4 shadow-sm", children: [
             /* @__PURE__ */ l("h3", { className: "font-bold text-gray-800 mb-3", children: "Historique des recharges" }),
             p.length === 0 ? /* @__PURE__ */ l("p", { className: "text-sm text-gray-500", children: "Aucune recharge pour le moment." }) : /* @__PURE__ */ l("div", { className: "space-y-2", children: p.map((re2) => /* @__PURE__ */ f("div", { className: "border border-gray-200 rounded-lg p-3", children: [
               /* @__PURE__ */ f("div", { className: "flex items-center justify-between mb-1", children: [
